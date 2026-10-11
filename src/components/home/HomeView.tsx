@@ -175,7 +175,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                <span>Kiểm soát thời gian: <strong>Tự động trừ điểm nếu vượt giờ</strong> (&lt; 2p: -2đ, 3-5p: -5đ, &gt; 5p: -10đ)</span>
+                <span>Kiểm soát thời gian: <strong>Trừ điểm nếu vượt giờ</strong> (&lt; 2p: -2đ, 3-5p: -5đ, &gt; 5p: -10đ)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-500" />
