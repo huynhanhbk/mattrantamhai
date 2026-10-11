@@ -33,11 +33,10 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
   onToggleFullscreen,
 }) => {
   const {
-    triggerTick,
-    triggerUrgentTick,
+    triggerSoftTick,
+    triggerMediumTick,
+    triggerWarningTick,
     triggerTimeout,
-    triggerCorrect,
-    triggerWrong,
     triggerStart,
   } = useSound(soundEnabled);
 
@@ -59,6 +58,7 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
   const remainingBaseTimeRef = useRef<number>(BASE_TIME_SECONDS);
   const overtimeStartTimestampRef = useRef<number | null>(null);
   const accumulatedOvertimeRef = useRef<number>(0);
+  const lastSecondRef = useRef<number | null>(null);
 
   // Formatting helpers
   const formatTime = (totalSec: number) => {
@@ -78,6 +78,7 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
     accumulatedOvertimeRef.current = 0;
     baseTimerEndRef.current = null;
     overtimeStartTimestampRef.current = null;
+    lastSecondRef.current = null;
   }, [BASE_TIME_SECONDS]);
 
   // Start / Resume Timer
@@ -108,7 +109,11 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
     }
   }, [isTimerRunning, isBaseTimeOut]);
 
-  // Main high-precision timer loop
+  // Main high-precision timer loop with 3 distinct audio stages:
+  // 1. > 60s: âm thanh đếm giây nhẹ nhàng, âm lượng rất nhỏ (soft tick)
+  // 2. 60s - 16s: âm thanh to hơn rõ ràng (medium tick)
+  // 3. 15s - 1s: âm thanh cảnh báo khác to hơn nữa (urgent warning tick)
+  // 4. 0s: chuông kết thúc (timeout bell)
   useEffect(() => {
     if (!isTimerRunning) return;
 
@@ -120,11 +125,17 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
         const secsLeft = Math.max(0, Math.ceil(msLeft / 1000));
         setTimeLeft(secsLeft);
 
-        // Sound triggers for last 10 seconds of base time
-        if (secsLeft <= 10 && secsLeft > 3) {
-          triggerTick();
-        } else if (secsLeft <= 3 && secsLeft > 0) {
-          triggerUrgentTick();
+        // Sound triggers when integer second ticks down
+        if (secsLeft !== lastSecondRef.current) {
+          lastSecondRef.current = secsLeft;
+
+          if (secsLeft > 60) {
+            triggerSoftTick();
+          } else if (secsLeft > 15) {
+            triggerMediumTick();
+          } else if (secsLeft > 0) {
+            triggerWarningTick();
+          }
         }
 
         if (msLeft <= 0) {
@@ -142,7 +153,15 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
     }, 150);
 
     return () => clearInterval(interval);
-  }, [isTimerRunning, isBaseTimeOut, isOvertimeMode, triggerTick, triggerUrgentTick, triggerTimeout]);
+  }, [
+    isTimerRunning,
+    isBaseTimeOut,
+    isOvertimeMode,
+    triggerSoftTick,
+    triggerMediumTick,
+    triggerWarningTick,
+    triggerTimeout,
+  ]);
 
   // Operator explicitly starts overtime tracking
   const handleStartOvertime = () => {
@@ -241,6 +260,8 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
             className={`flex items-center gap-2 px-4 md:px-5 py-2 rounded-2xl border-2 shadow-lg dark:shadow-xl transition-all ${
               timeLeft === 0
                 ? 'bg-rose-100 dark:bg-rose-950/80 border-rose-500 text-rose-800 dark:text-rose-300 shadow-rose-950/20 dark:shadow-rose-950/50'
+                : timeLeft <= 15
+                ? 'bg-rose-100 dark:bg-rose-950/90 border-rose-500 text-rose-800 dark:text-rose-300 shadow-rose-950/20 dark:shadow-rose-950/50 animate-bounce'
                 : timeLeft <= 60
                 ? 'bg-amber-100 dark:bg-amber-950/80 border-amber-500 dark:border-amber-400 text-amber-800 dark:text-amber-300 shadow-amber-950/20 dark:shadow-amber-950/50 animate-pulse'
                 : 'bg-indigo-50 dark:bg-slate-900 border-indigo-400 dark:border-indigo-500/50 text-indigo-900 dark:text-indigo-300 shadow-indigo-950/20 dark:shadow-indigo-950/40'

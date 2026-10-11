@@ -3,12 +3,15 @@ import {
   initAudio,
   playCorrectSound,
   playLotteryWinSound,
+  playMediumTickSound,
   playRevealAnswerSound,
+  playSoftTickSound,
   playSpinTickSound,
   playStartSound,
   playTickSound,
   playTimeoutSound,
   playUrgentTickSound,
+  playUrgentWarningTickSound,
   playWrongSound,
 } from '../utils/audio';
 
@@ -21,6 +24,21 @@ export function useSound(enabled: boolean, volume = 0.8) {
   const triggerUrgentTick = useCallback(() => {
     if (!enabled) return;
     playUrgentTickSound(volume);
+  }, [enabled, volume]);
+
+  const triggerSoftTick = useCallback(() => {
+    if (!enabled) return;
+    playSoftTickSound(volume);
+  }, [enabled, volume]);
+
+  const triggerMediumTick = useCallback(() => {
+    if (!enabled) return;
+    playMediumTickSound(volume);
+  }, [enabled, volume]);
+
+  const triggerWarningTick = useCallback(() => {
+    if (!enabled) return;
+    playUrgentWarningTickSound(volume);
   }, [enabled, volume]);
 
   const triggerTimeout = useCallback(() => {
@@ -62,6 +80,9 @@ export function useSound(enabled: boolean, volume = 0.8) {
     initAudio,
     triggerTick,
     triggerUrgentTick,
+    triggerSoftTick,
+    triggerMediumTick,
+    triggerWarningTick,
     triggerTimeout,
     triggerCorrect,
     triggerWrong,

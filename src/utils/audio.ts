@@ -27,6 +27,91 @@ export function initAudio(): void {
 }
 
 /**
+ * Soft, gentle tick with very low volume for Round 2 7-minute countdown
+ */
+export function playSoftTickSound(volume = 0.5): void {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(620, now);
+
+  // Very subtle, quiet volume (~0.05 max gain)
+  gain.gain.setValueAtTime(volume * 0.1, now);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+
+/**
+ * Louder, crisp tick for the last 60 seconds of Round 2
+ */
+export function playMediumTickSound(volume = 0.6): void {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(880, now); // A5
+
+  gain.gain.setValueAtTime(volume * 0.45, now);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.08);
+}
+
+/**
+ * Distinct urgent warning alarm tick for the final 15 seconds
+ */
+export function playUrgentWarningTickSound(volume = 0.8): void {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+
+  // Dual tone high-frequency alert pulse
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = 'triangle';
+  osc1.frequency.setValueAtTime(1400, now);
+
+  gain1.gain.setValueAtTime(volume * 0.65, now);
+  gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+
+  osc1.start(now);
+  osc1.stop(now + 0.12);
+
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(1760, now + 0.03);
+
+  gain2.gain.setValueAtTime(volume * 0.45, now + 0.03);
+  gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+
+  osc2.start(now + 0.03);
+  osc2.stop(now + 0.15);
+}
+
+/**
  * Short crisp tick for countdown
  */
 export function playTickSound(volume = 0.5): void {
