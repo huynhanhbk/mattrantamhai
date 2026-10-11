@@ -138,7 +138,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
 
         <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 text-center flex items-center justify-center gap-1.5">
           <Shield className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-500/70" />
-          <span>Hệ thống bảo mật điều hành Hội thi UBND & UBMTTQ xã Tam Hải</span>
+          <span>Hệ thống điều hành Hội thi UBND & UBMTTQ xã Tam Hải</span>
         </div>
       </div>
     </div>
