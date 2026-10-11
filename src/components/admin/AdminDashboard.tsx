@@ -361,10 +361,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   return (
-    <div className="min-h-[calc(100vh-68px)] bg-slate-100 dark:bg-slate-950 p-4 md:p-8 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="min-h-[calc(100vh-68px)] bg-[#f0f6fd] dark:bg-slate-950 p-4 md:p-8 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       <div className="max-w-7xl mx-auto">
         {/* Top bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-300 dark:border-slate-800">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-sky-200 dark:border-slate-800">
           <div>
             <div className="text-xs font-black uppercase tracking-widest text-cyan-600 dark:text-cyan-400">
               HỆ THỐNG ĐIỀU HÀNH & CƠ SỞ DỮ LIỆU
@@ -902,7 +902,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <div className="text-sm font-black text-slate-900 dark:text-white uppercase">{sit.title}</div>
                         <div className="text-xs text-slate-500 dark:text-slate-400">
                           Trạng thái: <span className="text-cyan-600 dark:text-cyan-400 font-semibold">{sit.status === 'completed' ? 'Đã thi' : 'Chưa thi'}</span>
-                          {sit.finalScore !== undefined && ` (${sit.finalScore}/30đ)`}
                         </div>
                       </div>
                     </div>

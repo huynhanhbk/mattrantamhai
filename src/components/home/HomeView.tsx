@@ -36,7 +36,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const round2PlayedCount = situations.filter((s) => s.status === 'completed').length;
 
   return (
-    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-4 md:p-8 lg:p-12 overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-4 md:p-8 lg:p-12 overflow-hidden bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Modern Digital Grid Background */}
       <div className="absolute inset-0 pointer-events-none opacity-15 dark:opacity-20">
         <div
@@ -175,7 +175,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                <span>Điểm tối đa: <strong>30 điểm</strong> (tự động trừ nếu vượt thời gian)</span>
+                <span>Kiểm soát thời gian: <strong>Tự động trừ điểm nếu vượt giờ</strong> (&lt; 2p: -2đ, 3-5p: -5đ, &gt; 5p: -10đ)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-500" />

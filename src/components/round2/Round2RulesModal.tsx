@@ -59,10 +59,10 @@ export const Round2RulesModal: React.FC<Round2RulesModalProps> = ({ isOpen, onCl
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-3">
             <h3 className="text-base font-bold text-rose-700 dark:text-rose-300 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5" />
-              <span>Điểm số & Mức trừ thời gian</span>
+              <span>Quy định mức trừ thời gian vượt</span>
             </h3>
             <div className="text-sm space-y-2 text-slate-600 dark:text-slate-300">
-              <p>Điểm tối đa: <strong className="text-emerald-600 dark:text-emerald-400 text-base">30 ĐIỂM</strong>.</p>
+              <p>Mức trừ điểm theo thời gian vượt so với 07 phút quy định:</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 text-xs">
                 <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                   <div className="font-semibold text-slate-800 dark:text-slate-200">Vượt dưới 02 phút</div>
@@ -78,7 +78,7 @@ export const Round2RulesModal: React.FC<Round2RulesModalProps> = ({ isOpen, onCl
                 </div>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 pt-1 italic">
-                * Phần mềm tự động tính điểm trừ theo thời gian vượt thực tế, đảm bảo không có điểm âm.
+                * Phần mềm tự động tính điểm trừ theo thời gian vượt thực tế và thông báo trực tiếp trên màn hình sân khấu.
               </p>
             </div>
           </div>

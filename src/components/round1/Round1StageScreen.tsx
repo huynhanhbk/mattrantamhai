@@ -253,7 +253,7 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
   // ==========================================
   if (stagePhase === 'intro') {
     return (
-      <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between items-center p-6 md:p-12 text-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden transition-colors duration-200">
+      <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between items-center p-6 md:p-12 text-center bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden transition-colors duration-200">
         {/* Background ambient lighting */}
         <div className="absolute inset-0 pointer-events-none opacity-15 dark:opacity-25">
           <div
@@ -319,7 +319,7 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
     const finalScore = questionResults.reduce((acc, r) => acc + r.points, 0);
 
     return (
-      <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between items-center p-6 md:p-12 text-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+      <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between items-center p-6 md:p-12 text-center bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
         <div className="relative z-10 w-full max-w-4xl">
           <div className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 border border-emerald-400 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-xs font-black uppercase tracking-wider mb-4">
             {pkg.isAudience || pkg.number >= 11 ? 'GIAO LƯU KHÁN GIẢ HOÀN THÀNH' : 'KẾT THÚC PHẦN THI'}
@@ -414,9 +414,9 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
   ];
 
   return (
-    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-6 md:p-8 lg:p-12 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 select-none overflow-hidden transition-colors duration-200">
+    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-6 md:p-8 lg:p-12 bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 select-none overflow-hidden transition-colors duration-200">
       {/* Top Header Information for Stage */}
-      <div className="relative z-10 w-full flex items-center justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+      <div className="relative z-10 w-full flex items-center justify-between gap-4 pb-3 border-b border-sky-200 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToPackageList}
@@ -515,29 +515,29 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
           </div>
         )}
 
-        {/* Question Card - Centered text, extra large font for projector */}
-        <div className="p-6 md:p-10 lg:p-14 rounded-3xl bg-white dark:bg-slate-900/95 border-2 border-cyan-400/60 dark:border-cyan-500/30 shadow-xl dark:shadow-2xl mb-6 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white leading-snug tracking-tight text-center max-w-5xl mx-auto">
+        {/* Question Card - Centered text, text-4xl level for projector */}
+        <div className="p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl bg-white/95 dark:bg-slate-900/95 border-2 border-cyan-400/60 dark:border-cyan-500/30 shadow-2xl mb-6 text-center backdrop-blur-sm">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-slate-900 dark:text-white leading-snug tracking-tight text-center max-w-5xl mx-auto">
             {currentQ.question}
           </h2>
           {currentQ.imageUrl && (
-            <div className="mt-5 max-h-56 rounded-2xl overflow-hidden flex justify-center">
+            <div className="mt-5 max-h-60 rounded-2xl overflow-hidden flex justify-center">
               <img
                 src={currentQ.imageUrl}
                 alt="Minh họa câu hỏi"
-                className="object-contain max-h-56 rounded-xl border border-slate-300 dark:border-slate-700"
+                className="object-contain max-h-60 rounded-xl border border-slate-300 dark:border-slate-700 shadow-md"
               />
             </div>
           )}
         </div>
 
-        {/* 4 Options Grid (2x2) - Larger font and clear keys */}
+        {/* 4 Options Grid (2x2) - Extra Large font and prominent key badges */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {options.map((opt) => {
             const isThisCorrect = opt.key === currentQ.correctAnswer;
             const isRevealed = isAnswerRevealed;
 
-            let cardStyle = 'bg-white dark:bg-slate-900/90 border-slate-300 dark:border-slate-700/80 text-slate-900 dark:text-slate-100 hover:border-cyan-500 shadow-sm';
+            let cardStyle = 'bg-white/95 dark:bg-slate-900/90 border-slate-300 dark:border-slate-700/80 text-slate-900 dark:text-slate-100 hover:border-cyan-500 shadow-md';
 
             if (isRevealed) {
               if (isThisCorrect) {
@@ -550,10 +550,10 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
             return (
               <div
                 key={opt.key}
-                className={`p-5 md:p-6 lg:p-7 rounded-3xl border transition-all duration-200 flex items-center gap-4 md:gap-5 ${cardStyle}`}
+                className={`p-6 sm:p-7 md:p-8 rounded-3xl border transition-all duration-200 flex items-center gap-5 md:gap-6 ${cardStyle}`}
               >
                 <div
-                  className={`w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-2xl flex items-center justify-center font-black text-2xl md:text-3xl lg:text-4xl flex-shrink-0 shadow-md ${
+                  className={`w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center font-black text-3xl sm:text-4xl md:text-5xl flex-shrink-0 shadow-md ${
                     isRevealed && isThisCorrect
                       ? 'bg-emerald-500 text-white dark:text-slate-950 font-black'
                       : 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 text-cyan-800 dark:text-cyan-300'
@@ -561,7 +561,7 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
                 >
                   {opt.key}
                 </div>
-                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold leading-snug text-slate-900 dark:text-slate-100">
+                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-snug text-slate-900 dark:text-slate-100">
                   {opt.text}
                 </div>
               </div>

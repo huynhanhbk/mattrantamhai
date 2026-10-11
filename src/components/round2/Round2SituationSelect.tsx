@@ -25,7 +25,6 @@ export const Round2SituationSelect: React.FC<Round2SituationSelectProps> = ({
     number: sit.number,
     title: sit.title,
     status: sit.status,
-    score: sit.finalScore,
   }));
 
   const handleConfirmDraw = (item: DrawItem) => {
@@ -37,7 +36,7 @@ export const Round2SituationSelect: React.FC<Round2SituationSelectProps> = ({
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-68px)] p-6 md:p-8 lg:p-12 flex flex-col justify-between bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="relative min-h-[calc(100vh-68px)] p-6 md:p-8 lg:p-12 flex flex-col justify-between bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 pointer-events-none opacity-15 dark:opacity-20">
         <div
@@ -50,11 +49,11 @@ export const Round2SituationSelect: React.FC<Round2SituationSelectProps> = ({
       </div>
 
       {/* Header */}
-      <div className="relative z-10 max-w-full mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+      <div className="relative z-10 max-w-full mx-auto w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-sky-200 dark:border-slate-800">
         <div className="flex items-center gap-4">
           <button
             onClick={onBackToHome}
-            className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:border-indigo-500 hover:bg-slate-50 dark:hover:bg-slate-850 shadow-sm transition"
+            className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-sky-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:border-indigo-500 hover:bg-slate-50 dark:hover:bg-slate-850 shadow-sm transition"
             title="Quay về Trang chủ"
           >
             <ArrowLeft className="w-6 h-6" />
@@ -83,7 +82,7 @@ export const Round2SituationSelect: React.FC<Round2SituationSelectProps> = ({
 
           <button
             onClick={onResetRound2}
-            className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-300 hover:border-rose-400 dark:hover:border-rose-500/50 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-xs md:text-sm font-semibold flex items-center gap-2 transition shadow-sm"
+            className="px-4 py-2.5 rounded-xl border border-sky-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-300 hover:border-rose-400 dark:hover:border-rose-500/50 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-xs md:text-sm font-semibold flex items-center gap-2 transition shadow-sm"
             title="Reset trạng thái 14 tình huống"
           >
             <RotateCcw className="w-4 h-4" />
@@ -135,7 +134,7 @@ export const Round2SituationSelect: React.FC<Round2SituationSelectProps> = ({
                   {isCompleted ? (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 border border-emerald-400 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>ĐÃ THI ({sit.finalScore ?? 0}/30đ)</span>
+                      <span>ĐÃ THI</span>
                     </div>
                   ) : isPlaying ? (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950 border border-amber-400 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 text-xs font-bold">

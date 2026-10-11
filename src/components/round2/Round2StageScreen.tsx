@@ -51,9 +51,8 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
   const [isOvertimeMode, setIsOvertimeMode] = useState(false);
   const [overtimeSeconds, setOvertimeSeconds] = useState(0);
 
-  // Scoring states
-  const [judgeScoreInput, setJudgeScoreInput] = useState<string>('30');
-  const [isScoringComplete, setIsScoringComplete] = useState(false);
+  // Completion state (no scoring calculations)
+  const [isCompleted, setIsCompleted] = useState(false);
 
   // Accurate timestamp refs
   const baseTimerEndRef = useRef<number | null>(null);
@@ -177,32 +176,25 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
     }
   }
 
-  const rawJudgeScore = Math.min(30, Math.max(0, parseFloat(judgeScoreInput) || 0));
-  const finalScore = Math.max(0, rawJudgeScore - penaltyPoints);
-
-  // Save situation score and mark as completed
+  // Save situation completion (No scoring calculation)
   const handleSaveResult = () => {
     const updatedSituation: Situation = {
       ...situation,
       status: 'completed',
       elapsedSeconds: BASE_TIME_SECONDS - timeLeft,
       overtimeSeconds: overtimeSeconds,
-      judgeScore: rawJudgeScore,
       penaltyScore: penaltyPoints,
-      finalScore: finalScore,
       playedAt: new Date().toLocaleString('vi-VN'),
     };
 
     onCompleteSituation(updatedSituation);
-    setIsScoringComplete(true);
-    if (finalScore >= 25) {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.7 },
-        colors: ['#6366f1', '#a855f7', '#ec4899', '#10b981'],
-      });
-    }
+    setIsCompleted(true);
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { y: 0.7 },
+      colors: ['#6366f1', '#a855f7', '#ec4899', '#10b981'],
+    });
   };
 
   // Keyboard navigation
@@ -223,13 +215,13 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
   });
 
   return (
-    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-6 md:p-8 lg:p-12 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 select-none overflow-hidden transition-colors duration-200">
+    <div className="relative min-h-[calc(100vh-68px)] flex flex-col justify-between p-6 md:p-8 lg:p-12 bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 select-none overflow-hidden transition-colors duration-200">
       {/* Stage Header */}
-      <div className="relative z-10 w-full flex items-center justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+      <div className="relative z-10 w-full flex items-center justify-between gap-4 pb-3 border-b border-sky-200 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToSituationList}
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white shadow-sm transition"
+            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-sky-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white shadow-sm transition"
             title="Quay lại danh sách tình huống"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -238,7 +230,7 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
             {situation.title}
           </div>
           <div className="hidden sm:block text-sm md:text-base font-bold text-slate-700 dark:text-slate-300">
-            PHẦN THI: XỬ LÝ TÌNH HUỐNG (TỐI ĐA 30 ĐIỂM)
+            PHẦN THI: XỬ LÝ TÌNH HUỐNG
           </div>
         </div>
 
@@ -260,12 +252,15 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
             </div>
           </div>
 
-          {/* Overtime display if applicable */}
+          {/* Large Overtime Display Badge in Header */}
           {overtimeSeconds > 0 && (
-            <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-rose-100 dark:bg-rose-950 border-2 border-rose-500 text-rose-800 dark:text-rose-300 animate-pulse shadow-lg">
-              <AlertTriangle className="w-5 h-5" />
+            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-100 dark:bg-rose-950 border-2 border-rose-500 text-rose-800 dark:text-rose-200 animate-pulse shadow-lg">
+              <AlertTriangle className="w-6 h-6 text-rose-600" />
               <div className="text-xl md:text-2xl font-mono font-black">
                 +{formatTime(overtimeSeconds)}
+              </div>
+              <div className="text-xs font-black px-2 py-0.5 rounded-lg bg-rose-600 text-white uppercase tracking-wider">
+                -{penaltyPoints}đ
               </div>
             </div>
           )}
@@ -300,19 +295,19 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
         </div>
       </div>
 
-      {/* Main Situation Content Stage Display - Large font, High contrast */}
-      <div className="relative z-10 max-w-6xl xl:max-w-7xl w-full mx-auto my-auto py-4 md:py-6">
+      {/* Main Situation Content Stage Display - Extra Large font, High contrast & Expanded Width */}
+      <div className="relative z-10 max-w-7xl 2xl:max-w-[1550px] w-full mx-auto my-auto py-4 md:py-6">
         {/* Warning notification when base time runs out */}
         {isBaseTimeOut && (
-          <div className="p-3.5 mb-4 rounded-2xl bg-rose-600 text-white font-black text-sm md:text-base uppercase tracking-wider flex items-center justify-between gap-3 shadow-lg animate-bounce">
+          <div className="p-4 mb-4 rounded-2xl bg-rose-600 text-white font-black text-sm md:text-base uppercase tracking-wider flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl animate-bounce">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle className="w-6 h-6" />
               <span>ĐÃ HẾT 07 PHÚT QUY ĐỊNH</span>
             </div>
             {!isOvertimeMode && (
               <button
                 onClick={handleStartOvertime}
-                className="px-4 py-1.5 rounded-xl bg-white text-rose-900 text-xs md:text-sm font-black hover:bg-slate-100 transition shadow"
+                className="px-5 py-2 rounded-xl bg-white text-rose-900 text-sm font-black hover:bg-rose-50 transition shadow"
               >
                 BẮT ĐẦU TÍNH THỜI GIAN VƯỢT
               </button>
@@ -320,8 +315,8 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
           </div>
         )}
 
-        {/* Grand Card for Situation Text - Wider & Extra Large Font for Projector */}
-        <div className="p-8 md:p-12 lg:p-16 rounded-3xl bg-white dark:bg-slate-900/95 border-2 border-indigo-400/60 dark:border-indigo-500/40 shadow-xl dark:shadow-2xl">
+        {/* Grand Card for Situation Text - Extra Wide & Massive Font for Projector */}
+        <div className="p-8 sm:p-12 md:p-16 lg:p-20 rounded-3xl bg-white/95 dark:bg-slate-900/95 border-2 border-indigo-400/60 dark:border-indigo-500/40 shadow-2xl backdrop-blur-sm">
           <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
             <span className="text-sm md:text-base font-black tracking-widest text-indigo-700 dark:text-indigo-400 uppercase">
               NỘI DUNG TÌNH HUỐNG THỰC TẾ TẠI ĐỊA PHƯƠNG
@@ -331,33 +326,113 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white leading-relaxed md:leading-relaxed lg:leading-normal tracking-normal">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-slate-900 dark:text-white leading-relaxed md:leading-relaxed lg:leading-normal tracking-tight text-center md:text-left">
             {situation.content}
           </h2>
 
           {situation.imageUrl && (
-            <div className="mt-8 rounded-2xl overflow-hidden flex justify-center max-h-64">
+            <div className="mt-8 rounded-2xl overflow-hidden flex justify-center max-h-72">
               <img
                 src={situation.imageUrl}
                 alt="Minh họa tình huống"
-                className="object-contain max-h-64 rounded-xl border border-slate-300 dark:border-slate-700"
+                className="object-contain max-h-72 rounded-xl border border-slate-300 dark:border-slate-700 shadow-md"
               />
             </div>
           )}
         </div>
       </div>
 
-      {/* Operator Scoring & Verdict Panel */}
-      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl mx-auto pt-4 border-t border-slate-200 dark:border-slate-800/80">
-        <div className="p-4 md:p-5 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
-          {/* Overtime Controls */}
-          <div className="flex items-center gap-3">
+      {/* Operator & Overtime / Penalty Dashboard (Score calculation completely removed) */}
+      <div className="relative z-10 w-full max-w-7xl 2xl:max-w-[1550px] mx-auto pt-4 border-t border-sky-200 dark:border-slate-800/80">
+        <div className="p-4 md:p-6 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-sky-200 dark:border-slate-700/80 shadow-lg flex flex-col lg:flex-row items-center justify-between gap-5">
+          {/* Overtime and Penalty Points - PROMINENT & EXTRA LARGE */}
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 w-full lg:w-auto">
+            {/* Large Card: Thời Gian Vượt Giờ */}
+            <div
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center gap-3.5 transition shadow-sm ${
+                overtimeSeconds > 0
+                  ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-900 dark:text-rose-200 animate-pulse'
+                  : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
+              }`}
+            >
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border ${
+                  overtimeSeconds > 0
+                    ? 'bg-rose-100 dark:bg-rose-900/60 border-rose-300 text-rose-600 dark:text-rose-300'
+                    : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500'
+                }`}
+              >
+                <Clock className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-[11px] font-black uppercase tracking-wider text-rose-700 dark:text-rose-400">
+                  THỜI GIAN VƯỢT GIỜ
+                </div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-black font-mono tracking-tight leading-none text-rose-600 dark:text-rose-300 mt-0.5">
+                  +{formatTime(overtimeSeconds)}
+                  <span className="text-xs font-semibold ml-2 font-sans opacity-75">
+                    ({overtimeSeconds}s)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Large Card: Mức Điểm Trừ */}
+            <div
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center gap-3.5 transition shadow-sm ${
+                penaltyPoints > 0
+                  ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-900 dark:text-rose-200'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-600 text-emerald-900 dark:text-emerald-200'
+              }`}
+            >
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border ${
+                  penaltyPoints > 0
+                    ? 'bg-rose-100 dark:bg-rose-900/60 border-rose-300 text-rose-600 dark:text-rose-300'
+                    : 'bg-emerald-100 dark:bg-emerald-900/60 border-emerald-300 text-emerald-600 dark:text-emerald-300'
+                }`}
+              >
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div>
+                <div
+                  className={`text-[11px] font-black uppercase tracking-wider ${
+                    penaltyPoints > 0
+                      ? 'text-rose-700 dark:text-rose-400'
+                      : 'text-emerald-700 dark:text-emerald-400'
+                  }`}
+                >
+                  MỨC ĐIỂM TRỪ
+                </div>
+                <div
+                  className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-none mt-0.5 ${
+                    penaltyPoints > 0
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : 'text-emerald-600 dark:text-emerald-400'
+                  }`}
+                >
+                  {penaltyPoints > 0 ? `-${penaltyPoints} ĐIỂM` : '0 ĐIỂM'}
+                </div>
+              </div>
+            </div>
+
+            {/* Rule reference tags */}
+            <div className="hidden xl:flex flex-col gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-semibold pl-2 border-l border-slate-200 dark:border-slate-800">
+              <div>• Dưới 2 phút: <strong className="text-rose-600 dark:text-rose-400">-2 điểm</strong></div>
+              <div>• Từ 3 đến 5 phút: <strong className="text-rose-600 dark:text-rose-400">-5 điểm</strong></div>
+              <div>• Trên 5 phút: <strong className="text-rose-600 dark:text-rose-400">-10 điểm</strong></div>
+            </div>
+          </div>
+
+          {/* Action buttons (Overtime control & Save/Complete) */}
+          <div className="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto">
+            {/* Overtime Controls */}
             {isBaseTimeOut && !isOvertimeMode && (
               <button
                 onClick={handleStartOvertime}
-                className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-rose-950/20 dark:shadow-rose-950/50"
+                className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm flex items-center gap-2 shadow-lg shadow-rose-950/20 dark:shadow-rose-950/50 transition active:scale-95"
               >
-                <Clock className="w-4 h-4" />
+                <Clock className="w-5 h-5" />
                 <span>Bắt đầu tính vượt giờ</span>
               </button>
             )}
@@ -365,67 +440,51 @@ export const Round2StageScreen: React.FC<Round2StageScreenProps> = ({
             {isOvertimeMode && isTimerRunning && (
               <button
                 onClick={handleStopAll}
-                className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg"
+                className="px-5 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-black text-sm flex items-center gap-2 shadow-lg transition active:scale-95"
               >
-                <StopCircle className="w-4 h-4" />
+                <StopCircle className="w-5 h-5" />
                 <span>Dừng đếm vượt giờ</span>
               </button>
             )}
 
-            <div className="text-xs text-slate-700 dark:text-slate-300 font-medium">
-              <div>Vượt giờ: <strong className="text-rose-600 dark:text-rose-400">{overtimeSeconds}s</strong></div>
-              <div>Điểm trừ: <strong className="text-rose-600 dark:text-rose-400">-{penaltyPoints}đ</strong></div>
-            </div>
-          </div>
+            {isOvertimeMode && !isTimerRunning && (
+              <button
+                onClick={handleStartOvertime}
+                className="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-sm flex items-center gap-2 shadow-lg transition active:scale-95"
+              >
+                <Play className="w-5 h-5" />
+                <span>Tiếp tục đếm vượt giờ</span>
+              </button>
+            )}
 
-          {/* Judge score input & Official Score Calculation */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <label htmlFor="judge-score" className="text-xs md:text-sm font-bold text-slate-700 dark:text-slate-300">
-                Điểm BGK (0-30):
-              </label>
-              <input
-                id="judge-score"
-                type="number"
-                min="0"
-                max="30"
-                step="0.5"
-                value={judgeScoreInput}
-                onChange={(e) => setJudgeScoreInput(e.target.value)}
-                className="w-20 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-950 border-2 border-indigo-500 text-center font-black text-xl text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
-            </div>
-
-            {/* Official Score Result */}
-            <div className="px-4 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 border border-indigo-300 dark:border-indigo-500/50 text-center shadow-sm">
-              <div className="text-[10px] uppercase font-bold text-indigo-700 dark:text-indigo-300">ĐIỂM CHÍNH THỨC</div>
-              <div className="text-2xl md:text-3xl font-black text-emerald-600 dark:text-emerald-400">
-                {finalScore} <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">/ 30</span>
-              </div>
-            </div>
-
-            {/* Save & Complete button */}
+            {/* Complete situation button */}
             <button
               id="save-round2-btn"
               onClick={handleSaveResult}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm md:text-base flex items-center gap-2 shadow-xl shadow-emerald-950/20 dark:shadow-emerald-950/40 transition active:scale-95"
+              className="px-7 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm md:text-base flex items-center gap-2 shadow-xl shadow-emerald-950/20 dark:shadow-emerald-950/40 transition active:scale-95"
             >
-              <Save className="w-5 h-5" />
-              <span>Hoàn thành</span>
+              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+              <span>Hoàn thành tình huống</span>
             </button>
           </div>
         </div>
 
-        {/* Feedback after saving */}
-        {isScoringComplete && (
-          <div className="mt-3 p-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-400 dark:border-emerald-500/60 text-emerald-900 dark:text-emerald-300 text-sm font-semibold flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5" />
-              <span>Đã ghi nhận kết quả {situation.title}: {finalScore}/30 điểm (Điểm gốc: {rawJudgeScore}, Trừ vượt giờ: -{penaltyPoints}đ)</span>
+        {/* Feedback after completion */}
+        {isCompleted && (
+          <div className="mt-3 p-3.5 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-400 dark:border-emerald-500/60 text-emerald-900 dark:text-emerald-300 text-sm font-bold flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+              <span>
+                Đã hoàn thành {situation.title} • Thời gian trình bày:{' '}
+                {formatTime(BASE_TIME_SECONDS - timeLeft)}
+                {overtimeSeconds > 0
+                  ? ` (Vượt giờ: +${formatTime(overtimeSeconds)}, Điểm trừ: -${penaltyPoints}đ)`
+                  : ' (Trong thời gian quy định)'}
+              </span>
             </div>
             <button
               onClick={onBackToSituationList}
-              className="px-3 py-1 bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold hover:bg-emerald-400"
+              className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black shadow transition"
             >
               Về danh sách tình huống
             </button>

@@ -40,7 +40,7 @@ export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('tamhai_theme');
     if (saved === 'light' || saved === 'dark') return saved;
-    return 'dark';
+    return 'light';
   });
 
   useEffect(() => {
@@ -305,7 +305,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-slate-950 font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-[#f0f6fd] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-slate-950 font-sans transition-colors duration-200">
       {/* Universal Stage Top Navigation Bar */}
       <Navbar
         settings={settings}
