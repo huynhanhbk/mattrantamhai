@@ -280,9 +280,7 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
 
         {/* Grand Title */}
         <div className="relative z-10 my-auto py-8">
-          <div className="inline-block px-5 py-1.5 rounded-full bg-cyan-100 dark:bg-cyan-950/80 border border-cyan-400 dark:border-cyan-500/50 text-cyan-800 dark:text-cyan-300 font-black tracking-widest text-sm uppercase mb-4 shadow-sm dark:shadow-lg dark:shadow-cyan-950/40">
-            {pkg.isAudience || pkg.number >= 11 ? 'GIAO LƯU KHÁN GIẢ & CỔ ĐỘNG VIÊN' : 'MÀN HÌNH SÂN KHẤU'}
-          </div>
+          
           <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-slate-900 dark:text-white uppercase tracking-tight drop-shadow-sm dark:drop-shadow-2xl">
             {pkg.title}
           </h1>
@@ -302,7 +300,6 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
               <span>BẮT ĐẦU</span>
             </button>
           </div>
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 font-medium">Có thể bấm phím [Space] trên bàn phím để bắt đầu</p>
         </div>
 
         <div className="relative z-10 text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -515,9 +512,9 @@ export const Round1StageScreen: React.FC<Round1StageScreenProps> = ({
           </div>
         )}
 
-        {/* Question Card - Centered text, text-4xl level for projector */}
+        {/* Question Card - Centered text, text-5xl level for projector */}
         <div className="p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl bg-white/95 dark:bg-slate-900/95 border-2 border-cyan-400/60 dark:border-cyan-500/30 shadow-2xl mb-6 text-center backdrop-blur-sm">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-slate-900 dark:text-white leading-snug tracking-tight text-center max-w-5xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white leading-snug tracking-tight text-center max-w-6xl mx-auto">
             {currentQ.question}
           </h2>
           {currentQ.imageUrl && (
